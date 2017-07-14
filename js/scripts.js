@@ -33,6 +33,30 @@ var sieveOfEra = function(num) {
   return numsUpToN;
 }
 
+var sieveOfEraRefined = function(num) {
+  var sieve = [];
+  var primes = [];
+
+  sieve[1] = false;
+
+  for (i = 2; i <= num; i++) {
+    sieve[i] = true;
+  }
+
+  for (i = 2; i * i <= num; i++) {
+    for(j = i * i; j <= num; j+= i) {
+      sieve[j] = false;
+    }
+  }
+
+  sieve.forEach(function(value, index) {
+    if (value) {
+      primes.push(index);
+    }
+  });
+  return primes;
+}
+
 
 
 $(function(){
@@ -54,7 +78,17 @@ $(function(){
   });
 
   $("#primes").submit(function(event){
-    var num = $("#primeNum").val();
-
+    event.preventDefault();
+    var num = parseInt($("#primeNum").val());
+    var primes = sieveOfEraRefined(num);
+    $(".output2").text(primes);
+    // var t0 = performance.now();
+    // sieveOfEra(num);
+    // var t1 = performance.now();
+    // console.log("Call to sieveOfEra took " + (t1 - t0) + "milliseconds.");
+    var t3 = performance.now();
+    sieveOfEraRefined(num);
+    var t4 = performance.now();
+    console.log("Call to sieveOfEraRefined took " + (t4 - t3) + "milliseconds.");
   });
 });
